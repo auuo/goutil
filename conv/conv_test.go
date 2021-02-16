@@ -2,22 +2,22 @@ package conv
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestInt2Letter(t *testing.T) {
-	if Int2Letter(1) != "A" {
-		t.Errorf("except A, but %s", Int2Letter(1))
+	tests := []struct {
+		in     int
+		expect string
+	}{
+		{1, "A"},
+		{25, "Y"},
+		{26, "Z"},
+		{27, "AA"},
+		{100, "CV"},
 	}
-	if Int2Letter(25) != "Y" {
-		t.Errorf("except Y, but %s", Int2Letter(25))
-	}
-	if Int2Letter(26) != "Z" {
-		t.Errorf("except Z, but %s", Int2Letter(26))
-	}
-	if Int2Letter(27) != "AA" {
-		t.Errorf("except AA, but %s", Int2Letter(27))
-	}
-	if Int2Letter(100) != "CV" {
-		t.Errorf("except CV, but %s", Int2Letter(100))
+	for _, tt := range tests {
+		assert.Equal(t, tt.expect, Int2Letter(tt.in))
 	}
 }
