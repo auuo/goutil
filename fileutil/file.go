@@ -16,7 +16,7 @@ func ReadLines(filename string) ([]string, error) {
 	for scanner.Scan() {
 		res = append(res, scanner.Text())
 	}
-	return res, nil
+	return res, scanner.Err()
 }
 
 func MustReadLines(filename string) []string {

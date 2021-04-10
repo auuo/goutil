@@ -34,7 +34,7 @@ func TestLRU(t *testing.T) {
 		length := lru.(*cache).list.Len()
 		ele := lru.(*cache).list.Front()
 		for i := 0; i < length; i++ {
-			res = append(res, ele.Value.(*item).value)
+			res = append(res, ele.Value.(*entry).value)
 			ele = ele.Next()
 		}
 		if len(it.expect) != len(res) {

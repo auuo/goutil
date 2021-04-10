@@ -11,7 +11,7 @@ type LRU interface {
 	Get(key string) (interface{}, bool)
 }
 
-type item struct {
+type entry struct {
 	key   string
 	value interface{}
 }
@@ -34,24 +34,19 @@ func (c *cache) Add(key string, value interface{}) {
 	c.lock.Lock()
 	c.lock.Unlock()
 
-	// todo 太丑陋
-	ele, ok := c.dataMap[key]
-	it := item{
-		key:   key,
-		value: value,
-	}
-	if ok {
-		*ele.Value.(*item) = it
-		c.Get(key)
+	if ele, ok := c.dataMap[key]; ok {
+		ele.Value.(*entry).value = value
+		c.list.MoveToBack(ele)
 	} else {
-		ele = c.list.PushBack(&it)
-		c.dataMap[key] = ele
+		c.dataMap[key] = c.list.PushBack(&entry{
+			key:   key,
+			value: value,
+		})
 	}
-
 	if len(c.dataMap) > c.cap {
 		ele := c.list.Front()
 		c.list.Remove(ele)
-		delete(c.dataMap, ele.Value.(*item).key)
+		delete(c.dataMap, ele.Value.(*entry).key)
 	}
 }
 
@@ -62,7 +57,7 @@ func (c *cache) Get(key string) (interface{}, bool) {
 	ele, ok := c.dataMap[key]
 	if ok {
 		c.list.MoveToBack(ele)
-		return ele.Value.(*item).value, true
+		return ele.Value.(*entry).value, true
 	}
 	return nil, false
 }

@@ -85,7 +85,7 @@ func (s *summary) lastBucket() *bucket {
 	if i > 0 {
 		s.lastTime = now
 	}
-	for ;i > 0; i-- {
+	for ; i > 0; i-- {
 		s.cur = s.cur.next
 		s.cur.Reset()
 	}
