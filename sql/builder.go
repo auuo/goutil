@@ -73,7 +73,7 @@ func (sb *Builder) InnerJoin(query, alias string) *Join {
 }
 
 func (sb *Builder) InnerJoinTable(table, alias string) *Join {
-	return sb.join("left", table, "", alias)
+	return sb.join("inner", table, "", alias)
 }
 
 func (sb *Builder) join(joinType, table, query, alias string) *Join {
